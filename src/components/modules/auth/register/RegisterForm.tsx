@@ -13,19 +13,23 @@ import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import { registrationSchema } from './registerValidation'
+import Link from 'next/link'
 
 const RegisterForm = () => {
   const form = useForm({
-    resolver: zodResolver(registrationSchema)
+    resolver: zodResolver(registrationSchema),
   })
 
-  const onSubmit:SubmitHandler<FieldValues> = (data) => {
+  const password = form.watch('password')
+  const passwordConfirm = form.watch('passwordConfirm')
+
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
     console.log(data)
   }
 
   return (
     <div className="border-2 border-gray-300 rounded-xl flex-grow max-w-md w-full p-5">
-      <div className='flex items-center space-x-4'>
+      <div className="flex items-center space-x-4">
         <Logo />
         <div>
           <h1 className="text-xl font-semibold">Register</h1>
@@ -56,7 +60,7 @@ const RegisterForm = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type='email' {...field} value={field.value || ''} />
+                  <Input type="email" {...field} value={field.value || ''} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -69,7 +73,7 @@ const RegisterForm = () => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type='password' {...field} value={field.value || ''} />
+                  <Input type="password" {...field} value={field.value || ''} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -82,15 +86,31 @@ const RegisterForm = () => {
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
-                  <Input type='password' {...field} value={field.value || ''} />
+                  <Input type="password" {...field} value={field.value || ''} />
                 </FormControl>
-                <FormMessage />
+                {passwordConfirm && password !== passwordConfirm ? (
+                  <FormMessage>Password Does not match</FormMessage>
+                ) : (
+                  <FormMessage />
+                )}
               </FormItem>
             )}
           />
-          <Button className='w-full mt-5' type="submit">Register</Button>
+          <Button
+            disabled={passwordConfirm && password !== passwordConfirm}
+            className="w-full mt-5"
+            type="submit"
+          >
+            Register
+          </Button>
         </form>
       </Form>
+      <p className="text-sm text-gray-600 text-center my-3">
+        Already have an account ?
+        <Link href="/login" className="text-primary">
+          Login
+        </Link>
+      </p>
     </div>
   )
 }
