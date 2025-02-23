@@ -1,3 +1,4 @@
+
 'use client'
 import Logo from '@/app/assets/svgs/Logo'
 import { Button } from '@/components/ui/button'
@@ -14,17 +15,32 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import { registrationSchema } from './registerValidation'
 import Link from 'next/link'
+import { registerUser } from '@/services/AuthService'
+import { toast } from 'sonner'
 
 const RegisterForm = () => {
   const form = useForm({
     resolver: zodResolver(registrationSchema),
   })
 
+  const {
+    formState: {isSubmitting}
+  } = form;
+
   const password = form.watch('password')
   const passwordConfirm = form.watch('passwordConfirm')
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data)
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    try {
+      const res = await registerUser(data)
+      if (res?.success) {
+        toast.success(res?.message)
+      } else {
+        toast.error(res?.message)
+      }
+    } catch (error: any) {
+      console.error(error)
+    }
   }
 
   return (
@@ -101,7 +117,7 @@ const RegisterForm = () => {
             className="w-full mt-5"
             type="submit"
           >
-            Register
+            {isSubmitting? "Registering....": "Register"}
           </Button>
         </form>
       </Form>
