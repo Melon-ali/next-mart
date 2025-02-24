@@ -113,7 +113,7 @@ const RegisterForm = () => {
             )}
           />
           <Button
-            disabled={passwordConfirm && password !== passwordConfirm}
+            disabled={!!passwordConfirm && password !== passwordConfirm}
             className="w-full mt-5"
             type="submit"
           >
