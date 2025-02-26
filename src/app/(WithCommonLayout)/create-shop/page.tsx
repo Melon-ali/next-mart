@@ -1,9 +1,9 @@
-import React from 'react'
+import CreateShopForm from '@/components/modules/create-shop/CreateShopForm'
 
 const CreateShopPage = () => {
   return (
-    <div>
-      <h1>This is Create Shop Page</h1>
+    <div className='flex justify-center items-center'>
+      <CreateShopForm />
     </div>
   )
 }
